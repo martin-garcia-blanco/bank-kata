@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class DateGenerator {
 
-  public static String formatDate() {
+  public String formatDate() {
     Date date = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     return dateFormat.format(date);
