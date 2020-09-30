@@ -14,10 +14,11 @@ public class AccountService {
   }
 
   public void withdrawal(int amount) {
-    throw new UnsupportedOperationException();
+    Transaction transaction = new Transaction("30/09/2020", -amount);
+    transactions.add(transaction);
   }
 
   public String printStatement() {
-    throw new UnsupportedOperationException();
+    return String.format("%s || %s || %s","Date", "Amount", "Balance");
   }
 }
