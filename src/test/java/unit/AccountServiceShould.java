@@ -95,6 +95,4 @@ public class AccountServiceShould {
     verify(transactions).add(withdrawal);
     verify(transactions).getAll();
   }
-
-
 }
