@@ -9,6 +9,7 @@ import bank.AccountService;
 import bank.Printer;
 import bank.Transaction;
 import bank.Transactions;
+import bank.date.DateGenerator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,8 @@ public class AccountServiceShould {
 
   @Mock
   private Transactions transactions;
+  @Mock
+  private DateGenerator dateGeneratorStub;
 
   private AccountService accountService;
   private Printer printer;
@@ -31,19 +34,21 @@ public class AccountServiceShould {
   @BeforeEach
   void setUp() {
     printer = new Printer();
-    accountService = new AccountService(transactions, printer);
+    accountService = new AccountService(transactions, printer, dateGeneratorStub);
   }
 
   @Test
   void be_able_to_receive_an_deposit_and_store_it() {
-    Transaction deposit = new Transaction("30/09/2020", 100);
+    when(dateGeneratorStub.formatDate()).thenReturn("25/09/2020");
+    Transaction deposit = new Transaction("25/09/2020", 100);
     accountService.deposit(100);
     verify(transactions).add(deposit);
   }
 
   @Test
   void be_able_to_receive_a_withdrawal_and_store_it() {
-    Transaction withdrawal = new Transaction("30/09/2020", -100);
+    when(dateGeneratorStub.formatDate()).thenReturn("25/09/2020");
+    Transaction withdrawal = new Transaction("25/09/2020", -100);
     accountService.withdrawal(100);
     verify(transactions).add(withdrawal);
   }
@@ -57,25 +62,26 @@ public class AccountServiceShould {
 
   @Test
   void be_able_to_add_a_deposit_and_print_headers_and_statement() {
-    Transaction deposit = new Transaction("30/09/2020", 100);
+    when(dateGeneratorStub.formatDate()).thenReturn("25/09/2020");
+    Transaction deposit = new Transaction("25/09/2020", 100);
     accountService.deposit(100);
 
     when(transactions.getAll()).thenReturn(new ArrayList<>(Collections.singletonList(deposit)));
     String expectedOutput = "Date || Amount || Balance\n"
-        + "30/09/2020 || 100 || 100";
+        + "25/09/2020 || 100 || 100";
     String output = accountService.printStatement();
 
     assertThat(output, is(expectedOutput));
 
     verify(transactions).add(deposit);
-    verify(transactions).getAll();
   }
 
   @Test
   void be_able_to_add_multiple_deposits_and_withdrawals_and_print_headers_and_statement() {
-    Transaction firsDeposit = new Transaction("30/09/2020", 100);
-    Transaction secondDeposit = new Transaction("30/09/2020", 500);
-    Transaction withdrawal = new Transaction("30/09/2020", -200);
+    when(dateGeneratorStub.formatDate()).thenReturn("25/09/2020");
+    Transaction firsDeposit = new Transaction("25/09/2020", 100);
+    Transaction secondDeposit = new Transaction("25/09/2020", 500);
+    Transaction withdrawal = new Transaction("25/09/2020", -200);
     accountService.deposit(100);
     accountService.deposit(500);
     accountService.withdrawal(200);
@@ -83,9 +89,9 @@ public class AccountServiceShould {
     when(transactions.getAll()).thenReturn(
         new ArrayList<>(List.of(firsDeposit, secondDeposit, withdrawal)));
     String expectedOutput = "Date || Amount || Balance\n"
-        + "30/09/2020 || 100 || 100\n"
-        + "30/09/2020 || 500 || 600\n"
-        + "30/09/2020 || -200 || 400";
+        + "25/09/2020 || 100 || 100\n"
+        + "25/09/2020 || 500 || 600\n"
+        + "25/09/2020 || -200 || 400";
     String output = accountService.printStatement();
 
     assertThat(output, is(expectedOutput));
@@ -93,6 +99,5 @@ public class AccountServiceShould {
     verify(transactions).add(firsDeposit);
     verify(transactions).add(secondDeposit);
     verify(transactions).add(withdrawal);
-    verify(transactions).getAll();
   }
 }

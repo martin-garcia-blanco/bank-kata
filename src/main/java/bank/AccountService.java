@@ -1,24 +1,30 @@
 package bank;
 
+import bank.date.DateGenerator;
 import java.util.List;
 
 public class AccountService {
 
   private final Transactions transactions;
-  private Printer printer;
+  private final Printer printer;
+  private final DateGenerator dateGenerator;
 
-  public AccountService(Transactions transactions, Printer printer) {
+  public AccountService(Transactions transactions, Printer printer,
+      DateGenerator dateGenerator) {
     this.transactions = transactions;
     this.printer = printer;
+    this.dateGenerator = dateGenerator;
   }
 
   public void deposit(int amount) {
-    Transaction transaction = new Transaction("30/09/2020", amount);
+    String date = dateGenerator.formatDate();
+    Transaction transaction = new Transaction(date, amount);
     transactions.add(transaction);
   }
 
   public void withdrawal(int amount) {
-    Transaction transaction = new Transaction("30/09/2020", -amount);
+    String date = dateGenerator.formatDate();
+    Transaction transaction = new Transaction(date, -amount);
     transactions.add(transaction);
   }
 

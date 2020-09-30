@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import bank.AccountService;
 import bank.Printer;
 import bank.Transactions;
+import bank.date.DateGenerator;
 import org.junit.jupiter.api.Test;
 
 public class PrintStatementFeature {
@@ -19,7 +20,8 @@ public class PrintStatementFeature {
 
     Transactions transactions = new Transactions();
     final Printer printer = new Printer();
-    AccountService accountService = new AccountService(transactions, printer);
+    final DateGenerator dateGenerator = new DateGenerator();
+    AccountService accountService = new AccountService(transactions, printer, dateGenerator);
     accountService.deposit(1000);
     accountService.deposit(100);
     accountService.withdrawal(500);
