@@ -16,6 +16,6 @@ public class Transactions {
   }
 
   public List<Transaction> getAll() {
-    throw new UnsupportedOperationException();
+    return transactions;
   }
 }
