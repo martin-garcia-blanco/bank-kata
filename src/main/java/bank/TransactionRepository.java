@@ -3,11 +3,11 @@ package bank;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Transactions {
+public class TransactionRepository {
 
   private final List<Transaction> transactions;
 
-  public Transactions() {
+  public TransactionRepository() {
     this.transactions = new ArrayList<>();
   }
 

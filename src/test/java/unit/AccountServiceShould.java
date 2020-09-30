@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import bank.AccountService;
 import bank.Printer;
 import bank.Transaction;
-import bank.Transactions;
+import bank.TransactionRepository;
 import bank.date.DateGenerator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class AccountServiceShould {
 
   @Mock
-  private Transactions transactions;
+  private TransactionRepository transactionRepository;
   @Mock
   private DateGenerator dateGeneratorStub;
 
@@ -34,7 +34,7 @@ public class AccountServiceShould {
   @BeforeEach
   void setUp() {
     printer = new Printer();
-    accountService = new AccountService(transactions, printer, dateGeneratorStub);
+    accountService = new AccountService(transactionRepository, printer, dateGeneratorStub);
   }
 
   @Test
@@ -42,7 +42,7 @@ public class AccountServiceShould {
     when(dateGeneratorStub.formatDate()).thenReturn("25/09/2020");
     Transaction deposit = new Transaction("25/09/2020", 100);
     accountService.deposit(100);
-    verify(transactions).add(deposit);
+    verify(transactionRepository).add(deposit);
   }
 
   @Test
@@ -50,7 +50,7 @@ public class AccountServiceShould {
     when(dateGeneratorStub.formatDate()).thenReturn("25/09/2020");
     Transaction withdrawal = new Transaction("25/09/2020", -100);
     accountService.withdrawal(100);
-    verify(transactions).add(withdrawal);
+    verify(transactionRepository).add(withdrawal);
   }
 
   @Test
@@ -66,14 +66,14 @@ public class AccountServiceShould {
     Transaction deposit = new Transaction("25/09/2020", 100);
     accountService.deposit(100);
 
-    when(transactions.getAll()).thenReturn(new ArrayList<>(Collections.singletonList(deposit)));
+    when(transactionRepository.getAll()).thenReturn(new ArrayList<>(Collections.singletonList(deposit)));
     String expectedOutput = "Date || Amount || Balance\n"
         + "25/09/2020 || 100 || 100";
     String output = accountService.printStatement();
 
     assertThat(output, is(expectedOutput));
 
-    verify(transactions).add(deposit);
+    verify(transactionRepository).add(deposit);
   }
 
   @Test
@@ -86,7 +86,7 @@ public class AccountServiceShould {
     accountService.deposit(500);
     accountService.withdrawal(200);
 
-    when(transactions.getAll()).thenReturn(
+    when(transactionRepository.getAll()).thenReturn(
         new ArrayList<>(List.of(firsDeposit, secondDeposit, withdrawal)));
     String expectedOutput = "Date || Amount || Balance\n"
         + "25/09/2020 || 100 || 100\n"
@@ -96,8 +96,8 @@ public class AccountServiceShould {
 
     assertThat(output, is(expectedOutput));
 
-    verify(transactions).add(firsDeposit);
-    verify(transactions).add(secondDeposit);
-    verify(transactions).add(withdrawal);
+    verify(transactionRepository).add(firsDeposit);
+    verify(transactionRepository).add(secondDeposit);
+    verify(transactionRepository).add(withdrawal);
   }
 }
