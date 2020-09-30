@@ -5,9 +5,11 @@ import java.util.List;
 public class AccountService {
 
   private final Transactions transactions;
+  private Printer printer;
 
-  public AccountService(Transactions transactions) {
+  public AccountService(Transactions transactions, Printer printer) {
     this.transactions = transactions;
+    this.printer = printer;
   }
 
   public void deposit(int amount) {
@@ -22,13 +24,6 @@ public class AccountService {
 
   public String printStatement() {
     List<Transaction> transactionsToPrint = transactions.getAll();
-    StringBuilder output = new StringBuilder(
-        String.format("%s || %s || %s", "Date", "Amount", "Balance"));
-    for (Transaction transaction : transactionsToPrint) {
-      output.append(String
-          .format("\n%s || %d || %d", transaction.getDate(), transaction.getAmount(),
-              transaction.getAmount()));
-    }
-    return output.toString();
+    return printer.print(transactionsToPrint);
   }
 }

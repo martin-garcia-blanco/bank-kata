@@ -6,12 +6,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import bank.AccountService;
+import bank.Printer;
 import bank.Transaction;
 import bank.Transactions;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,12 +22,15 @@ public class AccountServiceShould {
 
   @Mock
   private Transactions transactions;
+
   private AccountService accountService;
+  private Printer printer;
 
 
   @BeforeEach
   void setUp() {
-    accountService = new AccountService(transactions);
+    printer = new Printer();
+    accountService = new AccountService(transactions, printer);
   }
 
   @Test

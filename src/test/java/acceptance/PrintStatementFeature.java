@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import bank.AccountService;
+import bank.Printer;
 import bank.Transactions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,8 @@ public class PrintStatementFeature {
         + "30/09/2020 || -500 || 600\n";
 
     Transactions transactions = new Transactions();
-    AccountService accountService = new AccountService(transactions);
+    final Printer printer = new Printer();
+    AccountService accountService = new AccountService(transactions, printer);
     accountService.deposit(1000);
     accountService.deposit(100);
     accountService.withdrawal(500);
