@@ -11,6 +11,7 @@ import bank.Transaction;
 import bank.Transactions;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,6 +68,31 @@ public class AccountServiceShould {
     assertThat(output, is(expectedOutput));
 
     verify(transactions).add(deposit);
+    verify(transactions).getAll();
+  }
+
+  @Test
+  void be_able_to_add_multiple_deposits_and_withdrawals_and_print_headers_and_statement() {
+    Transaction firsDeposit = new Transaction("30/09/2020", 100);
+    Transaction secondDeposit = new Transaction("30/09/2020", 500);
+    Transaction withdrawal = new Transaction("30/09/2020", -200);
+    accountService.deposit(100);
+    accountService.deposit(500);
+    accountService.withdrawal(200);
+
+    when(transactions.getAll()).thenReturn(
+        new ArrayList<>(List.of(firsDeposit, secondDeposit, withdrawal)));
+    String expectedOutput = "Date || Amount || Balance\n"
+        + "30/09/2020 || 100 || 100\n"
+        + "30/09/2020 || 500 || 600\n"
+        + "30/09/2020 || -200 || 400";
+    String output = accountService.printStatement();
+
+    assertThat(output, is(expectedOutput));
+
+    verify(transactions).add(firsDeposit);
+    verify(transactions).add(secondDeposit);
+    verify(transactions).add(withdrawal);
     verify(transactions).getAll();
   }
 
