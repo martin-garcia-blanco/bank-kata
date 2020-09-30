@@ -10,9 +10,17 @@ public class Transaction {
     this.amount = amount;
   }
 
+  public String getDate() {
+    return date;
+  }
+
+  public int getAmount() {
+    return amount;
+  }
+
   @Override
   public boolean equals(Object obj) {
     Transaction transaction = (Transaction)obj;
-    return this.date == transaction.date && this.amount == transaction.amount;
+    return this.date.equals(transaction.date) && this.amount == transaction.amount;
   }
 }

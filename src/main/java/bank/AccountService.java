@@ -1,5 +1,7 @@
 package bank;
 
+import java.util.List;
+
 public class AccountService {
 
   private final Transactions transactions;
@@ -19,6 +21,14 @@ public class AccountService {
   }
 
   public String printStatement() {
-    return String.format("%s || %s || %s","Date", "Amount", "Balance");
+    List<Transaction> transactionsToPrint = transactions.getAll();
+    StringBuilder output = new StringBuilder(
+        String.format("%s || %s || %s", "Date", "Amount", "Balance"));
+    for (Transaction transaction : transactionsToPrint) {
+      output.append(String
+          .format("\n%s || %d || %d", transaction.getDate(), transaction.getAmount(),
+              transaction.getAmount()));
+    }
+    return output.toString();
   }
 }
